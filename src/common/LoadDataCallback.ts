@@ -15,7 +15,7 @@
 import type Nullable from './Nullable'
 import type { KLineData } from './Data'
 
-export type LoadDataType = 'init' | 'forward' | 'backward' | 'update'
+export type LoadDataType = 'init' | 'forward' | 'backward' | 'update' | 'patch'
 
 export interface LoadDataParams {
   type: LoadDataType
