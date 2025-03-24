@@ -533,7 +533,7 @@ export default class StoreImp implements Store {
       this._loading = false
       success = true
     } else {
-      if (type === LoadDataType.Patch) {
+      if (type === 'patch') {
         const isPatch = this._dataList.some((item, index) => {
           if (item.timestamp === data.timestamp) {
             this._dataList[index] = data
