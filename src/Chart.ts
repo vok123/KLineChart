@@ -76,6 +76,7 @@ export interface Chart extends Store {
   getSize: (paneId?: string, position?: DomPosition) => Nullable<Bounding>
   applyNewData: (dataList: KLineData[], more?: boolean | Partial<LoadDataMore>) => void
   updateData: (data: KLineData) => void
+  patchData: (data: KLineData) => void
   createIndicator: (value: string | IndicatorCreate, isStack?: boolean, paneOptions?: PaneOptions) => Nullable<string>
   getIndicators: (filter?: IndicatorFilter) => Indicator[]
   createOverlay: (value: string | OverlayCreate | Array<string | OverlayCreate>) => Nullable<string> | Array<Nullable<string>>
