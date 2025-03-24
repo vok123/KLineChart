@@ -704,6 +704,10 @@ export default class ChartImp implements Chart {
     this._chartStore.addData(data, 'update')
   }
 
+  patchData (data: KLineData): void {
+    this._chartStore.addData(data, 'patch')
+  }
+
   setLoadMoreDataCallback (cb: LoadDataCallback): void {
     this._chartStore.setLoadMoreDataCallback(cb)
   }
