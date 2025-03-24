@@ -533,24 +533,39 @@ export default class StoreImp implements Store {
       this._loading = false
       success = true
     } else {
-      const dataCount = this._dataList.length
-      // Determine where individual data should be added
-      const timestamp = data.timestamp
-      const lastDataTimestamp = formatValue(this._dataList[dataCount - 1], 'timestamp', 0) as number
-      if (timestamp > lastDataTimestamp) {
-        this._classifyTimeWeightTicks([data], true)
-        this._dataList.push(data)
-        let lastBarRightSideDiffBarCount = this.getLastBarRightSideDiffBarCount()
-        if (lastBarRightSideDiffBarCount < 0) {
-          this.setLastBarRightSideDiffBarCount(--lastBarRightSideDiffBarCount)
+      if (type === LoadDataType.Patch) {
+        const isPatch = this._dataList.some((item, index) => {
+          if (item.timestamp === data.timestamp) {
+            this._dataList[index] = data
+            return true
+          }
+          return false
+        })
+
+        if (isPatch) {
+          success = true
+          adjustFlag = true
         }
-        dataLengthChange = 1
-        success = true
-        adjustFlag = true
-      } else if (timestamp === lastDataTimestamp) {
-        this._dataList[dataCount - 1] = data
-        success = true
-        adjustFlag = true
+      } else {
+        const dataCount = this._dataList.length
+        // Determine where individual data should be added
+        const timestamp = data.timestamp
+        const lastDataTimestamp = formatValue(this._dataList[dataCount - 1], 'timestamp', 0) as number
+        if (timestamp > lastDataTimestamp) {
+          this._classifyTimeWeightTicks([data], true)
+          this._dataList.push(data)
+          let lastBarRightSideDiffBarCount = this.getLastBarRightSideDiffBarCount()
+          if (lastBarRightSideDiffBarCount < 0) {
+            this.setLastBarRightSideDiffBarCount(--lastBarRightSideDiffBarCount)
+          }
+          dataLengthChange = 1
+          success = true
+          adjustFlag = true
+        } else if (timestamp === lastDataTimestamp) {
+          this._dataList[dataCount - 1] = data
+          success = true
+          adjustFlag = true
+        }
       }
     }
     if (success) {
