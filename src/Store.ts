@@ -494,7 +494,8 @@ export default class StoreImp implements Store {
   addData (
     data: KLineData | KLineData[],
     type: LoadDataType,
-    more?: { forward: boolean, backward: boolean }
+    more?: { forward: boolean, backward: boolean },
+    pactRange?: { from: number; to: number }
   ): void {
     let success = false
     let adjustFlag = false
@@ -534,13 +535,16 @@ export default class StoreImp implements Store {
       success = true
     } else {
       if (type === 'patch') {
-        const isPatch = this._dataList.some((item, index) => {
-          if (item.timestamp === data.timestamp) {
-            this._dataList[index] = data
-            return true
+        let isPatch = false
+        const from = pactRange?.from ?? 0
+        const to = pactRange?.to ?? this._dataList.length
+        for (let i = from; i < to; i++) {
+          if (this._dataList[i].timestamp === data.timestamp) {
+            this._dataList[i] = data
+            isPatch = true
+            break
           }
-          return false
-        })
+        }
 
         if (isPatch) {
           success = true
