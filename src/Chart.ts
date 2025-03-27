@@ -76,7 +76,7 @@ export interface Chart extends Store {
   getSize: (paneId?: string, position?: DomPosition) => Nullable<Bounding>
   applyNewData: (dataList: KLineData[], more?: boolean | Partial<LoadDataMore>) => void
   updateData: (data: KLineData) => void
-  patchData: (data: KLineData) => void
+  patchData: (data: KLineData, pactRange?: { from: number; to: number }) => void
   createIndicator: (value: string | IndicatorCreate, isStack?: boolean, paneOptions?: PaneOptions) => Nullable<string>
   getIndicators: (filter?: IndicatorFilter) => Indicator[]
   createOverlay: (value: string | OverlayCreate | Array<string | OverlayCreate>) => Nullable<string> | Array<Nullable<string>>
@@ -704,8 +704,8 @@ export default class ChartImp implements Chart {
     this._chartStore.addData(data, 'update')
   }
 
-  patchData (data: KLineData): void {
-    this._chartStore.addData(data, 'patch')
+  patchData (data: KLineData, pactRange?: { from: number; to: number }): void {
+    this._chartStore.addData(data, 'patch', undefined, pactRange)
   }
 
   setLoadMoreDataCallback (cb: LoadDataCallback): void {
